@@ -30,9 +30,9 @@ int main(void)
 	valor = config_get_string_value(config,"CLAVE");
 	ip = config_get_string_value(config,"IP");
     puerto =config_get_string_value(config,"PUERTO");
-	log_info(logger, "CLAVE: %s", puerto);
-	log_info(logger,"IP: %s ", ip);
-	log_info(logger, "PUERTO: %s ", puerto);
+	log_info(logger, valor);
+	log_info(logger, ip );
+	log_info(logger, puerto);
 	//config_destroy(config);
 	//log_destroy(logger);
 
@@ -53,7 +53,7 @@ int main(void)
 	// Creamos una conexión hacia el servidor
 	conexion = crear_conexion(ip, puerto);
     
-	enviar_mensaje("CLAVE",conexion);
+	enviar_mensaje(valor,conexion);
 	// Enviamos al servidor el valor de CLAVE como mensaje
 
 	// Armamos y enviamos el paquete
@@ -89,11 +89,10 @@ void leer_consola(t_log* logger)
 	 leido = readline(">");
 
     // Leer y loguear líneas hasta recibir una cadena vacía
-    while (leido != NULL && *leido != '\0') {
-        printf("%s\n", leido);
+    while (leido != NULL && *leido != "") {
         // Loguear la línea si es necesario
         if (logger != NULL) {
-            log_info(logger, "%s\n", leido);
+            log_info(logger, leido);
         }
         // Liberar la memoria asignada por readline()
         free(leido);
@@ -113,8 +112,7 @@ void paquete(int conexion)
 
 leido = readline(">");
     // Leer y loguear líneas hasta recibir una cadena vacía
-    while (leido != NULL && *leido != '\0') {
-        printf("%s\n", leido);
+    while (leido != NULL && *leido != "") {
         // Loguear la línea si es necesario
         if (paquete != NULL) {
             agregar_a_paquete(paquete,leido,strlen(leido)+1);
