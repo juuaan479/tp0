@@ -15,25 +15,37 @@ int main(void)
 	/* ---------------- LOGGING ---------------- */
 
 	logger = iniciar_logger();
+	logger = log_create("tp0.log", "login", 1, LOG_LEVEL_INFO);
+	log_info (logger, "Soy un Log");
+	log_destroy (logger);
 
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
 
-
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
 	config = iniciar_config();
+    
+	config = config_create("cliente.config");
+	valor = config_get_string_value(config,"CLAVE");
+	ip = config_get_string_value(config,"IP");
+    puerto =config_get_string_value(config,"PUERTO");
+	log_info(logger, "CLAVE: %s", puerto);
+	log_info(logger,"IP: %s ", ip);
+	log_info(logger, "PUERTO: %s ", puerto);
+	config_destroy(config);
+	log_destroy(logger);
 
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
-
+     
 	// Loggeamos el valor de config
-
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
 	leer_consola(logger);
 
+	
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
 
 	// ADVERTENCIA: Antes de continuar, tenemos que asegurarnos que el servidor esté corriendo para poder conectarnos a él
@@ -71,13 +83,25 @@ void leer_consola(t_log* logger)
 	char* leido;
 
 	// La primera te la dejo de yapa
-	leido = readline("> ");
-
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
-
-
 	// ¡No te olvides de liberar las lineas antes de regresar!
+	 leido = readline(">");
 
+    // Leer y loguear líneas hasta recibir una cadena vacía
+    while (leido != NULL && *leido != '\0') {
+        printf("%s\n", leido);
+        // Loguear la línea si es necesario
+        if (logger != NULL) {
+            log_info(logger, "%s\n", leido);
+        }
+        // Liberar la memoria asignada por readline()
+        free(leido);
+        // Leer la siguiente línea
+        leido = readline(">");
+    }
+
+    // Liberar la última línea antes de salir
+    free(leido);
 }
 
 void paquete(int conexion)
