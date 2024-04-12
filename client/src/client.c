@@ -33,8 +33,8 @@ int main(void)
 	log_info(logger, "CLAVE: %s", puerto);
 	log_info(logger,"IP: %s ", ip);
 	log_info(logger, "PUERTO: %s ", puerto);
-	config_destroy(config);
-	log_destroy(logger);
+	//config_destroy(config);
+	//log_destroy(logger);
 
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
