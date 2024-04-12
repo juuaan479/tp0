@@ -26,10 +26,19 @@ int main(void)
 
 	config = iniciar_config();
     
-	config = config_create("cliente.config");
+	
+	
+    config = config_create("cliente.config");
+	
+	if (config == NULL) 
+    {
+        log_error(logger, "No se encuentra el config");
+        exit(-1);
+    }
+	
 	valor = config_get_string_value(config,"CLAVE");
 	ip = config_get_string_value(config,"IP");
-    puerto =config_get_string_value(config,"PUERTO");
+    puerto = config_get_string_value(config,"PUERTO");
 	log_info(logger, valor);
 	log_info(logger, ip );
 	log_info(logger, puerto);
