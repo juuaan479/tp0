@@ -43,7 +43,7 @@ int main(void)
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
-	leer_consola(logger);
+	//leer_consola(logger);
 
 	
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
@@ -52,7 +52,8 @@ int main(void)
 
 	// Creamos una conexión hacia el servidor
 	conexion = crear_conexion(ip, puerto);
-
+    
+	enviar_mensaje("CLAVE",conexion);
 	// Enviamos al servidor el valor de CLAVE como mensaje
 
 	// Armamos y enviamos el paquete
@@ -88,7 +89,7 @@ void leer_consola(t_log* logger)
 	 leido = readline(">");
 
     // Leer y loguear líneas hasta recibir una cadena vacía
-    while (leido != NULL && *leido != '\0') {
+    while (leido != NULL && *leido[0] != '\0') {
         printf("%s\n", leido);
         // Loguear la línea si es necesario
         if (logger != NULL) {
@@ -99,7 +100,6 @@ void leer_consola(t_log* logger)
         // Leer la siguiente línea
         leido = readline(">");
     }
-
     // Liberar la última línea antes de salir
     free(leido);
 }
@@ -109,10 +109,28 @@ void paquete(int conexion)
 	// Ahora toca lo divertido!
 	char* leido;
 	t_paquete* paquete;
+    paquete = crear_paquete();
 
-	// Leemos y esta vez agregamos las lineas al paquete
+leido = readline(">");
+    // Leer y loguear líneas hasta recibir una cadena vacía
+    while (leido != NULL && *leido[0] != '\0') {
+        printf("%s\n", leido);
+        // Loguear la línea si es necesario
+        if (logger != NULL) {
+            agregar_a_paquete(paquete,leido,strlen(leido));
+        }
+        // Liberar la memoria asignada por readline()
+        free(leido);
+        // Leer la siguiente línea
+        leido = readline(">");
+    }
+    // Liberar la última línea antes de salir
+    free(leido);
+	
+	enviar_paquete(paquete,conexion);
 
-
+    eliminar_paquete(paquete);
+    // Leemos y esta vez agregamos las lineas al paquete
 	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
 	
 }
@@ -121,4 +139,7 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	/* Y por ultimo, hay que liberar lo que utilizamos (conexion, log y config) 
 	  con las funciones de las commons y del TP mencionadas en el enunciado */
+	  log_destroy(logger);
+	  config_destroy(config);
+	  liberar_conexion(conexion);
 }
