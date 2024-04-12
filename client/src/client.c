@@ -86,7 +86,7 @@ void leer_consola(t_log* logger)
 	// La primera te la dejo de yapa
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
 	// ¡No te olvides de liberar las lineas antes de regresar!
-	 leido = readline(">");
+	/* leido = readline(">");
 
     // Leer y loguear líneas hasta recibir una cadena vacía
     while (leido != NULL && *leido != "") {
@@ -101,6 +101,7 @@ void leer_consola(t_log* logger)
     }
     // Liberar la última línea antes de salir
     free(leido);
+	*/
 }
 
 void paquete(int conexion)
@@ -109,7 +110,7 @@ void paquete(int conexion)
 	char* leido;
 	t_paquete* paquete;
     paquete = crear_paquete();
-
+/*
 leido = readline(">");
     // Leer y loguear líneas hasta recibir una cadena vacía
     while (leido != NULL && *leido != "") {
@@ -124,7 +125,19 @@ leido = readline(">");
     }
     // Liberar la última línea antes de salir
     free(leido);
-	
+	*/
+while (1) {
+        leido = readline("> ");
+        if (!leido) {
+            break;
+        }
+        if (!strncmp(leido, "", 4)) {
+            free(leido);
+            break;
+        }
+        agregar_a_paquete(paquete, leido, strlen(leido)+1);
+        free(leido);
+    }
 	enviar_paquete(paquete,conexion);
 
     eliminar_paquete(paquete);
