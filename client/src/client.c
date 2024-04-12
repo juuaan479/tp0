@@ -89,7 +89,7 @@ void leer_consola(t_log* logger)
 	 leido = readline(">");
 
     // Leer y loguear líneas hasta recibir una cadena vacía
-    while (leido != NULL && *leido[0] != '\0') {
+    while (leido != NULL && *leido != '\0') {
         printf("%s\n", leido);
         // Loguear la línea si es necesario
         if (logger != NULL) {
@@ -113,11 +113,11 @@ void paquete(int conexion)
 
 leido = readline(">");
     // Leer y loguear líneas hasta recibir una cadena vacía
-    while (leido != NULL && *leido[0] != '\0') {
+    while (leido != NULL && *leido != '\0') {
         printf("%s\n", leido);
         // Loguear la línea si es necesario
-        if (logger != NULL) {
-            agregar_a_paquete(paquete,leido,strlen(leido));
+        if (paquete != NULL) {
+            agregar_a_paquete(paquete,leido,strlen(leido)+1);
         }
         // Liberar la memoria asignada por readline()
         free(leido);
