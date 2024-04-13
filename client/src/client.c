@@ -66,7 +66,7 @@ t_log* iniciar_logger(void)
 	t_log* nuevo_logger;
 	if((nuevo_logger = log_create("tp0.log", "login", 1, LOG_LEVEL_INFO)) == NULL)
 	{
-		printf("No se puede crear el logger\n")
+		printf("No se puede crear el logger\n");
 		exit(1);
 	}
 
@@ -76,7 +76,7 @@ t_log* iniciar_logger(void)
 t_config* iniciar_config(void)
 {
 	t_config* nuevo_config;
-	if((nuevo_config = config_crete("./cliente.config")) == NULL)
+	if((nuevo_config = config_create("./cliente.config")) == NULL)
 	{
 		printf ("No se puede leer el config\n"); 
 		exit(2);
@@ -126,7 +126,7 @@ void leer_consola(t_log* logger)
 void paquete(int conexion)
 {
 	// Ahora toca lo divertido!
-	char* leido == NULL;
+	char* leido = NULL;
 	t_paquete* paquete;
     paquete = crear_paquete();
 
