@@ -15,9 +15,8 @@ int main(void)
 	/* ---------------- LOGGING ---------------- */
 
 	logger = iniciar_logger();
-	logger = log_create("tp0.log", "login", 1, LOG_LEVEL_INFO);
+	//logger = log_create("tp0.log", "login", 1, LOG_LEVEL_INFO);
 	log_info (logger, "Soy un Log");
-	log_destroy (logger);
 
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
@@ -25,26 +24,14 @@ int main(void)
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
 	config = iniciar_config();
-    
-	
-	
     config = config_create("cliente.config");
-	
-	if (config == NULL) 
-    {
-        log_error(logger, "No se encuentra el config");
-        exit(-1);
-    }
-	
+		
 	valor = config_get_string_value(config,"CLAVE");
 	ip = config_get_string_value(config,"IP");
     puerto = config_get_string_value(config,"PUERTO");
 	log_info(logger, valor);
 	log_info(logger, ip );
 	log_info(logger, puerto);
-	//config_destroy(config);
-	//log_destroy(logger);
-
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
      
@@ -52,7 +39,7 @@ int main(void)
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
-	//leer_consola(logger);
+	leer_consola(logger);
 
 	
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
@@ -77,6 +64,11 @@ int main(void)
 t_log* iniciar_logger(void)
 {
 	t_log* nuevo_logger;
+	if((nuevo_logger = log_create("tp0.log", "login", 1, LOG_LEVEL_INFO)) == NULL)
+	{
+		printf("No se puede crear el logger\n")
+		exit(1);
+	}
 
 	return nuevo_logger;
 }
@@ -84,14 +76,32 @@ t_log* iniciar_logger(void)
 t_config* iniciar_config(void)
 {
 	t_config* nuevo_config;
-
+	if((nuevo_config = config_crete("./cliente.config")) == NULL)
+	{
+		printf ("No se puede leer el config\n"); 
+		exit(2);
+	}
 	return nuevo_config;
 }
 
 void leer_consola(t_log* logger)
 {
-	char* leido;
+	char* leido; 
+	while (1)
+    {
+        leido = readline("> ");
 
+        if (leido[0] == '\0') 
+        {
+            break;
+        }
+
+        if (logger != NULL)
+        {
+            log_info(logger, "%s", leido);
+        }
+        free(leido);
+    }
 	// La primera te la dejo de yapa
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
 	// ¡No te olvides de liberar las lineas antes de regresar!
@@ -116,29 +126,14 @@ void leer_consola(t_log* logger)
 void paquete(int conexion)
 {
 	// Ahora toca lo divertido!
-	char* leido;
+	char* leido == NULL;
 	t_paquete* paquete;
     paquete = crear_paquete();
-/*
-leido = readline(">");
-    // Leer y loguear líneas hasta recibir una cadena vacía
-    while (leido != NULL && *leido != "") {
-        // Loguear la línea si es necesario
-        if (paquete != NULL) {
-            agregar_a_paquete(paquete,leido,strlen(leido)+1);
-        }
-        // Liberar la memoria asignada por readline()
-        free(leido);
-        // Leer la siguiente línea
-        leido = readline(">");
-    }
-    // Liberar la última línea antes de salir
-    free(leido);
-	*/
-while (1) {
+
+    while (1) {
         leido = readline("> ");
         if (!leido) {
-            break;
+            break; 
         }
         if (!strncmp(leido, "", 4)) {
             free(leido);
